@@ -1,4 +1,5 @@
 import '/backend/api_requests/api_calls.dart';
+import '/components/nav_bar/nav_bar_widget.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_charts.dart';
 import '/flutter_flow/flutter_flow_radio_button.dart';
@@ -243,7 +244,6 @@ class _DashboardWidgetState extends State<DashboardWidget>
                                                                     0.0,
                                                                     8.0),
                                                         child: Container(
-                                                          width: 130.0,
                                                           decoration:
                                                               BoxDecoration(
                                                             color: FlutterFlowTheme
@@ -349,7 +349,6 @@ class _DashboardWidgetState extends State<DashboardWidget>
                                                                     8.0,
                                                                     8.0),
                                                         child: Container(
-                                                          width: 130.0,
                                                           height: 80.0,
                                                           decoration:
                                                               BoxDecoration(
@@ -456,7 +455,6 @@ class _DashboardWidgetState extends State<DashboardWidget>
                                                                     16.0,
                                                                     8.0),
                                                         child: Container(
-                                                          width: 150.0,
                                                           decoration:
                                                               BoxDecoration(
                                                             color: FlutterFlowTheme
@@ -1401,6 +1399,15 @@ class _DashboardWidgetState extends State<DashboardWidget>
                           animationsMap['containerOnPageLoadAnimation4']!),
                     ),
                   ],
+                ),
+              ),
+              wrapWithModel(
+                model: _model.navBarModel,
+                updateCallback: () => safeSetState(() {}),
+                child: NavBarWidget(
+                  selectedPageIndex: 1,
+                  hidden: false,
+                  ontabposBtn: () async {},
                 ),
               ),
             ],

@@ -453,6 +453,38 @@ class ConfirmposAPICall {
   }
 }
 
+class GetuserinfofromIDAPICall {
+  static Future<ApiCallResponse> call({
+    String? userId = '',
+    String? jwt = '',
+  }) async {
+    final ffApiRequestBody = '''
+{
+  "user_id": "${escapeStringForJson(userId)}"
+}''';
+    return ApiManager.instance.makeApiCall(
+      callName: 'getuserinfofromIDAPI',
+      apiUrl:
+          'https://pljztqthmpvsvewmutmt.supabase.co/rest/v1/rpc/get_user_info_from_id',
+      callType: ApiCallType.POST,
+      headers: {
+        'apikey':
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsanp0cXRobXB2c3Zld211dG10Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMxNzE5NzgsImV4cCI6MjA1ODc0Nzk3OH0.kcDcnT4qExlFO--atY1h8cyxKlg68-Tu0RZx3zZ227g',
+        'Authorization': 'Bearer ${jwt}',
+      },
+      params: {},
+      body: ffApiRequestBody,
+      bodyType: BodyType.JSON,
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+}
+
 class GetposAPICall {
   static Future<ApiCallResponse> call({
     int? transactionId,
@@ -707,6 +739,36 @@ class SaleschartAPICall {
           .map((x) => castToType<String>(x))
           .withoutNulls
           .toList();
+}
+
+class AddtocartAPICall {
+  static Future<ApiCallResponse> call({
+    String? jwt = '',
+    dynamic payloadJson,
+  }) async {
+    final payload = _serializeJson(payloadJson);
+
+    return ApiManager.instance.makeApiCall(
+      callName: 'addtocartAPI',
+      apiUrl:
+          'https://pljztqthmpvsvewmutmt.supabase.co/rest/v1/rpc/add_to_cart_and_calculate_subtotal',
+      callType: ApiCallType.GET,
+      headers: {
+        'apikey':
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsanp0cXRobXB2c3Zld211dG10Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMxNzE5NzgsImV4cCI6MjA1ODc0Nzk3OH0.kcDcnT4qExlFO--atY1h8cyxKlg68-Tu0RZx3zZ227g',
+        'Authorization': 'Bearer ${jwt}',
+      },
+      params: {
+        'payload': payload,
+      },
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
 }
 
 class ApiPagingParams {

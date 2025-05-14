@@ -29,6 +29,8 @@ class PossModel extends FlutterFlowModel<PossWidget> {
 
   // Stores action output result for [Bottom Sheet - additemPOS] action in addProductBtn widget.
   List<dynamic>? prodResult;
+  // Stores action output result for [Backend Call - API (addtocartAPI)] action in addProductBtn widget.
+  ApiCallResponse? apiResultpce;
   // Stores action output result for [Bottom Sheet - addaddonPOS] action in addonsBtn widget.
   List<dynamic>? addonRes;
   // Stores action output result for [Backend Call - API (posAPI)] action in paymentBtn widget.

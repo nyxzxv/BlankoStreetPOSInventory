@@ -1,8 +1,11 @@
+import '/auth/supabase_auth/auth_util.dart';
+import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:provider/provider.dart';
 import 'loading_screen_model.dart';
 export 'loading_screen_model.dart';
 
@@ -29,7 +32,34 @@ class _LoadingScreenWidgetState extends State<LoadingScreenWidget> {
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      context.pushNamed(DashboardWidget.routeName);
+      _model.userDetails = await GetuserinfofromIDAPICall.call(
+        userId: currentUserUid,
+      );
+
+      if ((_model.userDetails?.succeeded ?? true)) {
+        FFAppState().updateUserDetailsStruct(
+          (e) => e
+            ..firstName = getJsonField(
+              (_model.userDetails?.jsonBody ?? ''),
+              r'''$[0].firstname''',
+            ).toString().toString()
+            ..lastName = getJsonField(
+              (_model.userDetails?.jsonBody ?? ''),
+              r'''$[0].last_name''',
+            ).toString().toString()
+            ..email = getJsonField(
+              (_model.userDetails?.jsonBody ?? ''),
+              r'''$[0].email''',
+            ).toString().toString()
+            ..role = getJsonField(
+              (_model.userDetails?.jsonBody ?? ''),
+              r'''$[0].role''',
+            ).toString().toString(),
+        );
+        safeSetState(() {});
+
+        context.pushNamed(DashboardWidget.routeName);
+      }
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
@@ -44,6 +74,8 @@ class _LoadingScreenWidgetState extends State<LoadingScreenWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();

@@ -1,3 +1,4 @@
+import '/components/nav_bar/nav_bar_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
 import 'inventory_widget.dart' show InventoryWidget;
@@ -17,8 +18,13 @@ class InventoryModel extends FlutterFlowModel<InventoryWidget> {
   int get tabBarPreviousIndex =>
       tabBarController != null ? tabBarController!.previousIndex : 0;
 
+  // Model for navBar component.
+  late NavBarModel navBarModel;
+
   @override
-  void initState(BuildContext context) {}
+  void initState(BuildContext context) {
+    navBarModel = createModel(context, () => NavBarModel());
+  }
 
   @override
   void dispose() {
@@ -26,5 +32,6 @@ class InventoryModel extends FlutterFlowModel<InventoryWidget> {
     searchTextController?.dispose();
 
     tabBarController?.dispose();
+    navBarModel.dispose();
   }
 }

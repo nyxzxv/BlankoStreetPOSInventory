@@ -11,13 +11,13 @@ export 'nav_bar_model.dart';
 class NavBarWidget extends StatefulWidget {
   const NavBarWidget({
     super.key,
-    int? pageNum,
+    required this.selectedPageIndex,
     this.hidden,
-    required this.ontabposBtn,
-  }) : this.pageNum = pageNum ?? 1;
+    this.ontabposBtn,
+  });
 
   /// page number per page
-  final int pageNum;
+  final int? selectedPageIndex;
 
   final bool? hidden;
   final Future Function()? ontabposBtn;
@@ -138,29 +138,29 @@ class _NavBarWidgetState extends State<NavBarWidget>
       alignment: AlignmentDirectional(0.0, 1.0),
       child: Stack(
         children: [
-          if (widget.hidden == false)
-            Align(
-              alignment: AlignmentDirectional(0.0, 1.0),
-              child: Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 16.0),
-                child: Container(
-                  width: 360.0,
-                  height: 70.0,
-                  decoration: BoxDecoration(
-                    color: FlutterFlowTheme.of(context).secondary,
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(12.0),
-                      bottomRight: Radius.circular(12.0),
-                      topLeft: Radius.circular(12.0),
-                      topRight: Radius.circular(12.0),
-                    ),
+          Align(
+            alignment: AlignmentDirectional(0.0, 1.0),
+            child: Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 16.0),
+              child: Container(
+                width: 360.0,
+                height: 70.0,
+                decoration: BoxDecoration(
+                  color: FlutterFlowTheme.of(context).secondary,
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(12.0),
+                    bottomRight: Radius.circular(12.0),
+                    topLeft: Radius.circular(12.0),
+                    topRight: Radius.circular(12.0),
                   ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Column(
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Column(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -171,16 +171,25 @@ class _NavBarWidgetState extends State<NavBarWidget>
                                 FlutterFlowTheme.of(context).primaryText,
                             icon: Icon(
                               Icons.space_dashboard_sharp,
-                              color: widget.pageNum == 1
+                              color: widget.selectedPageIndex == 1
                                   ? FlutterFlowTheme.of(context).primaryText
                                   : FlutterFlowTheme.of(context).primary,
                               size: 24.0,
                             ),
                             onPressed: () async {
-                              context.pushNamed(DashboardWidget.routeName);
+                              context.goNamed(
+                                DashboardWidget.routeName,
+                                extra: <String, dynamic>{
+                                  kTransitionInfoKey: TransitionInfo(
+                                    hasTransition: true,
+                                    transitionType: PageTransitionType.fade,
+                                    duration: Duration(milliseconds: 0),
+                                  ),
+                                },
+                              );
                             },
                           ),
-                          if (widget.pageNum == 1)
+                          if (widget.selectedPageIndex == 1)
                             SizedBox(
                               width: 30.0,
                               child: Divider(
@@ -192,7 +201,9 @@ class _NavBarWidgetState extends State<NavBarWidget>
                                 animationsMap['dividerOnPageLoadAnimation1']!),
                         ],
                       ),
-                      Column(
+                    ),
+                    Expanded(
+                      child: Column(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -203,16 +214,25 @@ class _NavBarWidgetState extends State<NavBarWidget>
                                 FlutterFlowTheme.of(context).primaryText,
                             icon: Icon(
                               Icons.access_time_filled,
-                              color: widget.pageNum == 2
+                              color: widget.selectedPageIndex == 2
                                   ? FlutterFlowTheme.of(context).primaryText
                                   : FlutterFlowTheme.of(context).primary,
                               size: 24.0,
                             ),
-                            onPressed: () {
-                              print('shiftBtn pressed ...');
+                            onPressed: () async {
+                              context.goNamed(
+                                ShiftsWidget.routeName,
+                                extra: <String, dynamic>{
+                                  kTransitionInfoKey: TransitionInfo(
+                                    hasTransition: true,
+                                    transitionType: PageTransitionType.fade,
+                                    duration: Duration(milliseconds: 0),
+                                  ),
+                                },
+                              );
                             },
                           ),
-                          if (widget.pageNum == 2)
+                          if (widget.selectedPageIndex == 2)
                             SizedBox(
                               width: 30.0,
                               child: Divider(
@@ -224,18 +244,20 @@ class _NavBarWidgetState extends State<NavBarWidget>
                                 animationsMap['dividerOnPageLoadAnimation2']!),
                         ],
                       ),
-                      Opacity(
-                        opacity: 0.0,
-                        child: Container(
-                          width: 40.0,
-                          height: 100.0,
-                          decoration: BoxDecoration(
-                            color: FlutterFlowTheme.of(context)
-                                .secondaryBackground,
-                          ),
+                    ),
+                    Opacity(
+                      opacity: 0.0,
+                      child: Container(
+                        width: 40.0,
+                        height: 100.0,
+                        decoration: BoxDecoration(
+                          color:
+                              FlutterFlowTheme.of(context).secondaryBackground,
                         ),
                       ),
-                      Column(
+                    ),
+                    Expanded(
+                      child: Column(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -246,7 +268,7 @@ class _NavBarWidgetState extends State<NavBarWidget>
                                 FlutterFlowTheme.of(context).primaryText,
                             icon: Icon(
                               Icons.inventory,
-                              color: widget.pageNum == 3
+                              color: widget.selectedPageIndex == 3
                                   ? FlutterFlowTheme.of(context).primaryText
                                   : FlutterFlowTheme.of(context).primary,
                               size: 24.0,
@@ -264,7 +286,7 @@ class _NavBarWidgetState extends State<NavBarWidget>
                               );
                             },
                           ),
-                          if (widget.pageNum == 3)
+                          if (widget.selectedPageIndex == 3)
                             SizedBox(
                               width: 30.0,
                               child: Divider(
@@ -276,7 +298,9 @@ class _NavBarWidgetState extends State<NavBarWidget>
                                 animationsMap['dividerOnPageLoadAnimation3']!),
                         ],
                       ),
-                      Column(
+                    ),
+                    Expanded(
+                      child: Column(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -287,7 +311,7 @@ class _NavBarWidgetState extends State<NavBarWidget>
                                 FlutterFlowTheme.of(context).primaryText,
                             icon: Icon(
                               Icons.more,
-                              color: widget.pageNum == 4
+                              color: widget.selectedPageIndex == 4
                                   ? FlutterFlowTheme.of(context).primaryText
                                   : FlutterFlowTheme.of(context).primary,
                               size: 24.0,
@@ -305,7 +329,7 @@ class _NavBarWidgetState extends State<NavBarWidget>
                               );
                             },
                           ),
-                          if (widget.pageNum == 4)
+                          if (widget.selectedPageIndex == 4)
                             SizedBox(
                               width: 30.0,
                               child: Divider(
@@ -317,13 +341,12 @@ class _NavBarWidgetState extends State<NavBarWidget>
                                 animationsMap['dividerOnPageLoadAnimation4']!),
                         ],
                       ),
-                    ]
-                        .divide(SizedBox(width: 16.0))
-                        .around(SizedBox(width: 16.0)),
-                  ),
+                    ),
+                  ].divide(SizedBox(width: 16.0)).around(SizedBox(width: 16.0)),
                 ),
               ),
             ),
+          ),
           Align(
             alignment: AlignmentDirectional(0.0, 1.0),
             child: Padding(

@@ -1,15 +1,18 @@
 import '/auth/supabase_auth/auth_util.dart';
 import '/backend/api_requests/api_calls.dart';
+import '/components/nav_bar/nav_bar_widget.dart';
 import '/components/update_addon_component/update_addon_component_widget.dart';
 import '/components/update_item_component/update_item_component_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'inventory_model.dart';
 export 'inventory_model.dart';
 
@@ -55,6 +58,8 @@ class _InventoryWidgetState extends State<InventoryWidget>
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -271,36 +276,50 @@ class _InventoryWidgetState extends State<InventoryWidget>
                           Column(
                             mainAxisSize: MainAxisSize.max,
                             children: [
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    16.0, 16.0, 16.0, 16.0),
-                                child: FFButtonWidget(
-                                  onPressed: () async {
-                                    if (_model.tabBarCurrentIndex == 0) {
-                                      context
-                                          .pushNamed(AddItemWidget.routeName);
-                                    } else {
-                                      context
-                                          .pushNamed(AddaddonWidget.routeName);
-                                    }
-                                  },
-                                  text: 'Add Item',
-                                  icon: Icon(
-                                    Icons.add,
-                                    size: 15.0,
-                                  ),
-                                  options: FFButtonOptions(
-                                    width: double.infinity,
-                                    height: 40.0,
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        16.0, 0.0, 16.0, 0.0),
-                                    iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 0.0, 0.0, 0.0),
-                                    color: FlutterFlowTheme.of(context).primary,
-                                    textStyle: FlutterFlowTheme.of(context)
-                                        .titleSmall
-                                        .override(
-                                          font: GoogleFonts.interTight(
+                              if (FFAppState().userDetails.role == 'Admin')
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      16.0, 16.0, 16.0, 16.0),
+                                  child: FFButtonWidget(
+                                    onPressed: () async {
+                                      if (_model.tabBarCurrentIndex == 0) {
+                                        context
+                                            .pushNamed(AddItemWidget.routeName);
+                                      } else {
+                                        context.pushNamed(
+                                            AddaddonWidget.routeName);
+                                      }
+                                    },
+                                    text: 'Add Item',
+                                    icon: Icon(
+                                      Icons.add,
+                                      size: 15.0,
+                                    ),
+                                    options: FFButtonOptions(
+                                      width: double.infinity,
+                                      height: 40.0,
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          16.0, 0.0, 16.0, 0.0),
+                                      iconPadding:
+                                          EdgeInsetsDirectional.fromSTEB(
+                                              0.0, 0.0, 0.0, 0.0),
+                                      color:
+                                          FlutterFlowTheme.of(context).primary,
+                                      textStyle: FlutterFlowTheme.of(context)
+                                          .titleSmall
+                                          .override(
+                                            font: GoogleFonts.interTight(
+                                              fontWeight:
+                                                  FlutterFlowTheme.of(context)
+                                                      .titleSmall
+                                                      .fontWeight,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .titleSmall
+                                                      .fontStyle,
+                                            ),
+                                            color: Colors.white,
+                                            letterSpacing: 0.0,
                                             fontWeight:
                                                 FlutterFlowTheme.of(context)
                                                     .titleSmall
@@ -310,22 +329,11 @@ class _InventoryWidgetState extends State<InventoryWidget>
                                                     .titleSmall
                                                     .fontStyle,
                                           ),
-                                          color: Colors.white,
-                                          letterSpacing: 0.0,
-                                          fontWeight:
-                                              FlutterFlowTheme.of(context)
-                                                  .titleSmall
-                                                  .fontWeight,
-                                          fontStyle:
-                                              FlutterFlowTheme.of(context)
-                                                  .titleSmall
-                                                  .fontStyle,
-                                        ),
-                                    elevation: 0.0,
-                                    borderRadius: BorderRadius.circular(8.0),
+                                      elevation: 0.0,
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
                                   ),
                                 ),
-                              ),
                             ],
                           ),
                         ],
@@ -646,121 +654,119 @@ class _InventoryWidgetState extends State<InventoryWidget>
                                                                         mainAxisAlignment:
                                                                             MainAxisAlignment.spaceBetween,
                                                                         children: [
-                                                                          Icon(
-                                                                            Icons.warning_rounded,
-                                                                            color:
-                                                                                FlutterFlowTheme.of(context).error,
-                                                                            size:
-                                                                                24.0,
-                                                                          ),
-                                                                          FlutterFlowIconButton(
-                                                                            borderColor:
-                                                                                Colors.transparent,
-                                                                            borderRadius:
-                                                                                30.0,
-                                                                            borderWidth:
-                                                                                1.0,
-                                                                            buttonSize:
-                                                                                40.0,
-                                                                            icon:
-                                                                                Icon(
-                                                                              Icons.edit_outlined,
-                                                                              color: FlutterFlowTheme.of(context).secondaryText,
-                                                                              size: 20.0,
+                                                                          if (functions.parseStringToInt(getJsonField(
+                                                                                itemAPIItem,
+                                                                                r'''$.quantity''',
+                                                                              ).toString())! <=
+                                                                              10)
+                                                                            Icon(
+                                                                              Icons.warning_rounded,
+                                                                              color: FlutterFlowTheme.of(context).error,
+                                                                              size: 24.0,
                                                                             ),
-                                                                            onPressed:
-                                                                                () async {
-                                                                              await showModalBottomSheet(
-                                                                                isScrollControlled: true,
-                                                                                backgroundColor: Colors.transparent,
-                                                                                enableDrag: false,
-                                                                                context: context,
-                                                                                builder: (context) {
-                                                                                  return GestureDetector(
-                                                                                    onTap: () {
-                                                                                      FocusScope.of(context).unfocus();
-                                                                                      FocusManager.instance.primaryFocus?.unfocus();
-                                                                                    },
-                                                                                    child: Padding(
-                                                                                      padding: MediaQuery.viewInsetsOf(context),
-                                                                                      child: Container(
-                                                                                        height: MediaQuery.sizeOf(context).height * 0.5,
-                                                                                        child: UpdateItemComponentWidget(
-                                                                                          id: getJsonField(
-                                                                                            itemAPIItem,
-                                                                                            r'''$.id''',
-                                                                                          ),
-                                                                                          productName: getJsonField(
-                                                                                            itemAPIItem,
-                                                                                            r'''$.product_name''',
-                                                                                          ).toString(),
-                                                                                          price: getJsonField(
-                                                                                            itemAPIItem,
-                                                                                            r'''$.price''',
-                                                                                          ),
-                                                                                          quantity: valueOrDefault<int>(
-                                                                                            getJsonField(
-                                                                                              itemAPIItem,
-                                                                                              r'''$.quantity''',
-                                                                                            ),
-                                                                                            0,
-                                                                                          ),
-                                                                                        ),
-                                                                                      ),
-                                                                                    ),
-                                                                                  );
-                                                                                },
-                                                                              ).then((value) => safeSetState(() {}));
-                                                                            },
-                                                                          ),
-                                                                          FlutterFlowIconButton(
-                                                                            borderColor:
-                                                                                Colors.transparent,
-                                                                            borderRadius:
-                                                                                30.0,
-                                                                            borderWidth:
-                                                                                1.0,
-                                                                            buttonSize:
-                                                                                40.0,
-                                                                            icon:
-                                                                                Icon(
-                                                                              Icons.delete_outlined,
-                                                                              color: Color(0xFFE86969),
-                                                                              size: 20.0,
-                                                                            ),
-                                                                            onPressed:
-                                                                                () async {
-                                                                              var confirmDialogResponse = await showDialog<bool>(
-                                                                                    context: context,
-                                                                                    builder: (alertDialogContext) {
-                                                                                      return AlertDialog(
-                                                                                        title: Text('Delete this item?'),
-                                                                                        content: Text('Are you sure you want to delete this?'),
-                                                                                        actions: [
-                                                                                          TextButton(
-                                                                                            onPressed: () => Navigator.pop(alertDialogContext, false),
-                                                                                            child: Text('Cancel'),
-                                                                                          ),
-                                                                                          TextButton(
-                                                                                            onPressed: () => Navigator.pop(alertDialogContext, true),
-                                                                                            child: Text('Confirm'),
-                                                                                          ),
-                                                                                        ],
-                                                                                      );
-                                                                                    },
-                                                                                  ) ??
-                                                                                  false;
-                                                                              if (confirmDialogResponse) {
-                                                                                await DelproductAPICall.call(
-                                                                                  id: getJsonField(
-                                                                                    itemAPIItem,
-                                                                                    r'''$.id''',
+                                                                          if (FFAppState().userDetails.role ==
+                                                                              'Admin')
+                                                                            Row(
+                                                                              mainAxisSize: MainAxisSize.max,
+                                                                              children: [
+                                                                                FlutterFlowIconButton(
+                                                                                  borderColor: Colors.transparent,
+                                                                                  borderRadius: 30.0,
+                                                                                  borderWidth: 1.0,
+                                                                                  buttonSize: 40.0,
+                                                                                  icon: Icon(
+                                                                                    Icons.edit_outlined,
+                                                                                    color: FlutterFlowTheme.of(context).secondaryText,
+                                                                                    size: 20.0,
                                                                                   ),
-                                                                                  jwt: currentJwtToken,
-                                                                                );
-                                                                              }
-                                                                            },
-                                                                          ),
+                                                                                  onPressed: () async {
+                                                                                    await showModalBottomSheet(
+                                                                                      isScrollControlled: true,
+                                                                                      backgroundColor: Colors.transparent,
+                                                                                      enableDrag: false,
+                                                                                      context: context,
+                                                                                      builder: (context) {
+                                                                                        return GestureDetector(
+                                                                                          onTap: () {
+                                                                                            FocusScope.of(context).unfocus();
+                                                                                            FocusManager.instance.primaryFocus?.unfocus();
+                                                                                          },
+                                                                                          child: Padding(
+                                                                                            padding: MediaQuery.viewInsetsOf(context),
+                                                                                            child: Container(
+                                                                                              height: MediaQuery.sizeOf(context).height * 0.5,
+                                                                                              child: UpdateItemComponentWidget(
+                                                                                                id: getJsonField(
+                                                                                                  itemAPIItem,
+                                                                                                  r'''$.id''',
+                                                                                                ),
+                                                                                                productName: getJsonField(
+                                                                                                  itemAPIItem,
+                                                                                                  r'''$.product_name''',
+                                                                                                ).toString(),
+                                                                                                price: getJsonField(
+                                                                                                  itemAPIItem,
+                                                                                                  r'''$.price''',
+                                                                                                ),
+                                                                                                quantity: valueOrDefault<int>(
+                                                                                                  getJsonField(
+                                                                                                    itemAPIItem,
+                                                                                                    r'''$.quantity''',
+                                                                                                  ),
+                                                                                                  0,
+                                                                                                ),
+                                                                                              ),
+                                                                                            ),
+                                                                                          ),
+                                                                                        );
+                                                                                      },
+                                                                                    ).then((value) => safeSetState(() {}));
+                                                                                  },
+                                                                                ),
+                                                                                FlutterFlowIconButton(
+                                                                                  borderColor: Colors.transparent,
+                                                                                  borderRadius: 30.0,
+                                                                                  borderWidth: 1.0,
+                                                                                  buttonSize: 40.0,
+                                                                                  icon: Icon(
+                                                                                    Icons.delete_outlined,
+                                                                                    color: Color(0xFFE86969),
+                                                                                    size: 20.0,
+                                                                                  ),
+                                                                                  onPressed: () async {
+                                                                                    var confirmDialogResponse = await showDialog<bool>(
+                                                                                          context: context,
+                                                                                          builder: (alertDialogContext) {
+                                                                                            return AlertDialog(
+                                                                                              title: Text('Delete this item?'),
+                                                                                              content: Text('Are you sure you want to delete this?'),
+                                                                                              actions: [
+                                                                                                TextButton(
+                                                                                                  onPressed: () => Navigator.pop(alertDialogContext, false),
+                                                                                                  child: Text('Cancel'),
+                                                                                                ),
+                                                                                                TextButton(
+                                                                                                  onPressed: () => Navigator.pop(alertDialogContext, true),
+                                                                                                  child: Text('Confirm'),
+                                                                                                ),
+                                                                                              ],
+                                                                                            );
+                                                                                          },
+                                                                                        ) ??
+                                                                                        false;
+                                                                                    if (confirmDialogResponse) {
+                                                                                      await DelproductAPICall.call(
+                                                                                        id: getJsonField(
+                                                                                          itemAPIItem,
+                                                                                          r'''$.id''',
+                                                                                        ),
+                                                                                        jwt: currentJwtToken,
+                                                                                      );
+                                                                                    }
+                                                                                  },
+                                                                                ),
+                                                                              ],
+                                                                            ),
                                                                         ],
                                                                       ),
                                                                     ),
@@ -1018,110 +1024,105 @@ class _InventoryWidgetState extends State<InventoryWidget>
                                                                         mainAxisAlignment:
                                                                             MainAxisAlignment.spaceBetween,
                                                                         children: [
-                                                                          FlutterFlowIconButton(
-                                                                            borderColor:
-                                                                                Colors.transparent,
-                                                                            borderRadius:
-                                                                                30.0,
-                                                                            borderWidth:
-                                                                                1.0,
-                                                                            buttonSize:
-                                                                                40.0,
-                                                                            icon:
-                                                                                Icon(
-                                                                              Icons.edit_outlined,
-                                                                              color: FlutterFlowTheme.of(context).secondaryText,
-                                                                              size: 20.0,
-                                                                            ),
-                                                                            onPressed:
-                                                                                () async {
-                                                                              await showModalBottomSheet(
-                                                                                isScrollControlled: true,
-                                                                                backgroundColor: Colors.transparent,
-                                                                                context: context,
-                                                                                builder: (context) {
-                                                                                  return GestureDetector(
-                                                                                    onTap: () {
-                                                                                      FocusScope.of(context).unfocus();
-                                                                                      FocusManager.instance.primaryFocus?.unfocus();
-                                                                                    },
-                                                                                    child: Padding(
-                                                                                      padding: MediaQuery.viewInsetsOf(context),
-                                                                                      child: Container(
-                                                                                        height: MediaQuery.sizeOf(context).height * 0.5,
-                                                                                        child: UpdateAddonComponentWidget(
-                                                                                          id: getJsonField(
-                                                                                            itemAPIItem,
-                                                                                            r'''$.id''',
-                                                                                          ),
-                                                                                          addonName: getJsonField(
-                                                                                            itemAPIItem,
-                                                                                            r'''$.addon_name''',
-                                                                                          ).toString(),
-                                                                                          price: getJsonField(
-                                                                                            itemAPIItem,
-                                                                                            r'''$.price''',
-                                                                                          ),
-                                                                                          quantity: getJsonField(
-                                                                                            itemAPIItem,
-                                                                                            r'''$.quantity''',
-                                                                                          ),
-                                                                                        ),
-                                                                                      ),
-                                                                                    ),
-                                                                                  );
-                                                                                },
-                                                                              ).then((value) => safeSetState(() {}));
-                                                                            },
-                                                                          ),
-                                                                          FlutterFlowIconButton(
-                                                                            borderColor:
-                                                                                Colors.transparent,
-                                                                            borderRadius:
-                                                                                30.0,
-                                                                            borderWidth:
-                                                                                1.0,
-                                                                            buttonSize:
-                                                                                40.0,
-                                                                            icon:
-                                                                                Icon(
-                                                                              Icons.delete_outlined,
-                                                                              color: Color(0xFFE86969),
-                                                                              size: 20.0,
-                                                                            ),
-                                                                            onPressed:
-                                                                                () async {
-                                                                              var confirmDialogResponse = await showDialog<bool>(
-                                                                                    context: context,
-                                                                                    builder: (alertDialogContext) {
-                                                                                      return AlertDialog(
-                                                                                        title: Text('Delete this item?'),
-                                                                                        content: Text('Are you sure you want to delete this?'),
-                                                                                        actions: [
-                                                                                          TextButton(
-                                                                                            onPressed: () => Navigator.pop(alertDialogContext, false),
-                                                                                            child: Text('Cancel'),
-                                                                                          ),
-                                                                                          TextButton(
-                                                                                            onPressed: () => Navigator.pop(alertDialogContext, true),
-                                                                                            child: Text('Confirm'),
-                                                                                          ),
-                                                                                        ],
-                                                                                      );
-                                                                                    },
-                                                                                  ) ??
-                                                                                  false;
-                                                                              if (confirmDialogResponse) {
-                                                                                await DeladdonAPICall.call(
-                                                                                  id: getJsonField(
-                                                                                    itemAPIItem,
-                                                                                    r'''$.id''',
+                                                                          if (FFAppState().userDetails.role ==
+                                                                              'Admin')
+                                                                            Row(
+                                                                              mainAxisSize: MainAxisSize.max,
+                                                                              children: [
+                                                                                FlutterFlowIconButton(
+                                                                                  borderColor: Colors.transparent,
+                                                                                  borderRadius: 30.0,
+                                                                                  borderWidth: 1.0,
+                                                                                  buttonSize: 40.0,
+                                                                                  icon: Icon(
+                                                                                    Icons.edit_outlined,
+                                                                                    color: FlutterFlowTheme.of(context).secondaryText,
+                                                                                    size: 20.0,
                                                                                   ),
-                                                                                  jwt: currentJwtToken,
-                                                                                );
-                                                                              }
-                                                                            },
-                                                                          ),
+                                                                                  onPressed: () async {
+                                                                                    await showModalBottomSheet(
+                                                                                      isScrollControlled: true,
+                                                                                      backgroundColor: Colors.transparent,
+                                                                                      context: context,
+                                                                                      builder: (context) {
+                                                                                        return GestureDetector(
+                                                                                          onTap: () {
+                                                                                            FocusScope.of(context).unfocus();
+                                                                                            FocusManager.instance.primaryFocus?.unfocus();
+                                                                                          },
+                                                                                          child: Padding(
+                                                                                            padding: MediaQuery.viewInsetsOf(context),
+                                                                                            child: Container(
+                                                                                              height: MediaQuery.sizeOf(context).height * 0.5,
+                                                                                              child: UpdateAddonComponentWidget(
+                                                                                                id: getJsonField(
+                                                                                                  itemAPIItem,
+                                                                                                  r'''$.id''',
+                                                                                                ),
+                                                                                                addonName: getJsonField(
+                                                                                                  itemAPIItem,
+                                                                                                  r'''$.addon_name''',
+                                                                                                ).toString(),
+                                                                                                price: getJsonField(
+                                                                                                  itemAPIItem,
+                                                                                                  r'''$.price''',
+                                                                                                ),
+                                                                                                quantity: getJsonField(
+                                                                                                  itemAPIItem,
+                                                                                                  r'''$.quantity''',
+                                                                                                ),
+                                                                                              ),
+                                                                                            ),
+                                                                                          ),
+                                                                                        );
+                                                                                      },
+                                                                                    ).then((value) => safeSetState(() {}));
+                                                                                  },
+                                                                                ),
+                                                                                FlutterFlowIconButton(
+                                                                                  borderColor: Colors.transparent,
+                                                                                  borderRadius: 30.0,
+                                                                                  borderWidth: 1.0,
+                                                                                  buttonSize: 40.0,
+                                                                                  icon: Icon(
+                                                                                    Icons.delete_outlined,
+                                                                                    color: Color(0xFFE86969),
+                                                                                    size: 20.0,
+                                                                                  ),
+                                                                                  onPressed: () async {
+                                                                                    var confirmDialogResponse = await showDialog<bool>(
+                                                                                          context: context,
+                                                                                          builder: (alertDialogContext) {
+                                                                                            return AlertDialog(
+                                                                                              title: Text('Delete this item?'),
+                                                                                              content: Text('Are you sure you want to delete this?'),
+                                                                                              actions: [
+                                                                                                TextButton(
+                                                                                                  onPressed: () => Navigator.pop(alertDialogContext, false),
+                                                                                                  child: Text('Cancel'),
+                                                                                                ),
+                                                                                                TextButton(
+                                                                                                  onPressed: () => Navigator.pop(alertDialogContext, true),
+                                                                                                  child: Text('Confirm'),
+                                                                                                ),
+                                                                                              ],
+                                                                                            );
+                                                                                          },
+                                                                                        ) ??
+                                                                                        false;
+                                                                                    if (confirmDialogResponse) {
+                                                                                      await DeladdonAPICall.call(
+                                                                                        id: getJsonField(
+                                                                                          itemAPIItem,
+                                                                                          r'''$.id''',
+                                                                                        ),
+                                                                                        jwt: currentJwtToken,
+                                                                                      );
+                                                                                    }
+                                                                                  },
+                                                                                ),
+                                                                              ],
+                                                                            ),
                                                                         ],
                                                                       ),
                                                                     ),
@@ -1152,6 +1153,16 @@ class _InventoryWidgetState extends State<InventoryWidget>
                   ),
                 ),
               ),
+              if (true)
+                wrapWithModel(
+                  model: _model.navBarModel,
+                  updateCallback: () => safeSetState(() {}),
+                  child: NavBarWidget(
+                    selectedPageIndex: 3,
+                    hidden: false,
+                    ontabposBtn: () async {},
+                  ),
+                ),
             ],
           ),
         ),
