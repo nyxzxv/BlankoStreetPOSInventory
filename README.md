@@ -1,6 +1,6 @@
 # BSCPOSInventory
 
-A new Flutter project.
+Point of Sale and Inventory Management system
 
 ## Getting Started
 
