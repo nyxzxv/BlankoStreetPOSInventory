@@ -556,14 +556,7 @@ class GetsaleslogsAPICall {
             'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsanp0cXRobXB2c3Zld211dG10Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMxNzE5NzgsImV4cCI6MjA1ODc0Nzk3OH0.kcDcnT4qExlFO--atY1h8cyxKlg68-Tu0RZx3zZ227g',
         'Authorization': 'Bearer ${jwt}',
       },
-      params: {
-        'date_time': dateTime,
-        'items': items,
-        'total_price': totalPrice,
-        'amount_received': amountReceived,
-        'change': change,
-        'payment_method': paymentMethod,
-      },
+      params: {},
       returnBody: true,
       encodeBodyUtf8: false,
       decodeUtf8: false,
@@ -572,6 +565,61 @@ class GetsaleslogsAPICall {
       alwaysAllowBody: false,
     );
   }
+
+  static List<String>? dateTime(dynamic response) => (getJsonField(
+        response,
+        r'''$[:].date_time''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  static List<int>? totalPrice(dynamic response) => (getJsonField(
+        response,
+        r'''$[:].total_price''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<int>(x))
+          .withoutNulls
+          .toList();
+  static List<int>? amountReceived(dynamic response) => (getJsonField(
+        response,
+        r'''$[:].amount_received''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<int>(x))
+          .withoutNulls
+          .toList();
+  static List<int>? change(dynamic response) => (getJsonField(
+        response,
+        r'''$[:].change''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<int>(x))
+          .withoutNulls
+          .toList();
+  static List<String>? items(dynamic response) => (getJsonField(
+        response,
+        r'''$[:].items''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  static List<String>? paymentMethod(dynamic response) => (getJsonField(
+        response,
+        r'''$[:].payment_method''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
 }
 
 class DashboardsummaryAPICall {

@@ -4,6 +4,7 @@ import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -72,7 +73,7 @@ class _AddaddonWidgetState extends State<AddaddonWidget> {
               size: 25.0,
             ),
             onPressed: () async {
-              context.pop();
+              context.pushNamed(InventoryWidget.routeName);
             },
           ),
           title: Text(
@@ -532,6 +533,9 @@ class _AddaddonWidgetState extends State<AddaddonWidget> {
                                               .itemQuantityTextController.text),
                                           jwt: currentJwtToken,
                                         );
+
+                                        context.pushNamed(
+                                            InventoryWidget.routeName);
 
                                         safeSetState(() {});
                                       },

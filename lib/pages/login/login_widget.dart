@@ -452,7 +452,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                             }
 
                                             context.goNamedAuth(
-                                                LoadingScreenWidget.routeName,
+                                                DashboardWidget.routeName,
                                                 context.mounted);
                                           },
                                           text: 'Sign In',

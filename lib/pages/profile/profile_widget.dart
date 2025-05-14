@@ -1,6 +1,7 @@
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'profile_model.dart';
@@ -58,8 +59,8 @@ class _ProfileWidgetState extends State<ProfileWidget> {
               color: FlutterFlowTheme.of(context).primaryText,
               size: 25.0,
             ),
-            onPressed: () {
-              print('IconButton pressed ...');
+            onPressed: () async {
+              context.pushNamed(SettingsWidget.routeName);
             },
           ),
           title: Text(

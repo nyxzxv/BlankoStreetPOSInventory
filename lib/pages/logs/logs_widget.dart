@@ -1,7 +1,10 @@
+import '/auth/supabase_auth/auth_util.dart';
 import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/index.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'logs_model.dart';
@@ -51,7 +54,9 @@ class _LogsWidgetState extends State<LogsWidget> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<ApiCallResponse>(
-      future: GetsaleslogsAPICall.call(),
+      future: GetsaleslogsAPICall.call(
+        jwt: currentJwtToken,
+      ),
       builder: (context, snapshot) {
         // Customize what your widget looks like when it's loading.
         if (!snapshot.hasData) {
@@ -93,7 +98,7 @@ class _LogsWidgetState extends State<LogsWidget> with TickerProviderStateMixin {
                   size: 25.0,
                 ),
                 onPressed: () async {
-                  context.pop();
+                  context.pushNamed(MorePageWidget.routeName);
                 },
               ),
               title: Text(
@@ -198,10 +203,9 @@ class _LogsWidgetState extends State<LogsWidget> with TickerProviderStateMixin {
                                   Expanded(
                                     child: Builder(
                                       builder: (context) {
-                                        final saleslogList = getJsonField(
-                                          logsGetsaleslogsAPIResponse.jsonBody,
-                                          r'''$.items''',
-                                        ).toList();
+                                        final saleslogList =
+                                            logsGetsaleslogsAPIResponse.jsonBody
+                                                .toList();
 
                                         return ListView.builder(
                                           padding: EdgeInsets.zero,
@@ -218,7 +222,6 @@ class _LogsWidgetState extends State<LogsWidget> with TickerProviderStateMixin {
                                                       16.0, 10.0, 16.0, 10.0),
                                               child: Container(
                                                 width: double.infinity,
-                                                height: 160.0,
                                                 decoration: BoxDecoration(
                                                   color: FlutterFlowTheme.of(
                                                           context)
@@ -254,7 +257,7 @@ class _LogsWidgetState extends State<LogsWidget> with TickerProviderStateMixin {
                                                             EdgeInsetsDirectional
                                                                 .fromSTEB(
                                                                     16.0,
-                                                                    0.0,
+                                                                    8.0,
                                                                     0.0,
                                                                     0.0),
                                                         child: Row(
@@ -263,6 +266,9 @@ class _LogsWidgetState extends State<LogsWidget> with TickerProviderStateMixin {
                                                           mainAxisAlignment:
                                                               MainAxisAlignment
                                                                   .start,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
                                                           children: [
                                                             Text(
                                                               'Date/Time:',
@@ -295,8 +301,7 @@ class _LogsWidgetState extends State<LogsWidget> with TickerProviderStateMixin {
                                                             ),
                                                             Text(
                                                               getJsonField(
-                                                                logsGetsaleslogsAPIResponse
-                                                                    .jsonBody,
+                                                                saleslogListItem,
                                                                 r'''$.date_time''',
                                                               ).toString(),
                                                               style: FlutterFlowTheme
@@ -347,6 +352,9 @@ class _LogsWidgetState extends State<LogsWidget> with TickerProviderStateMixin {
                                                         mainAxisAlignment:
                                                             MainAxisAlignment
                                                                 .start,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
                                                         children: [
                                                           Text(
                                                             'Items:',
@@ -378,19 +386,31 @@ class _LogsWidgetState extends State<LogsWidget> with TickerProviderStateMixin {
                                                                       .fontStyle,
                                                                 ),
                                                           ),
-                                                          Text(
-                                                            getJsonField(
-                                                              logsGetsaleslogsAPIResponse
-                                                                  .jsonBody,
-                                                              r'''$.items''',
-                                                            ).toString(),
-                                                            style: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .bodyMedium
-                                                                .override(
-                                                                  font:
-                                                                      GoogleFonts
-                                                                          .inter(
+                                                          Expanded(
+                                                            child: AutoSizeText(
+                                                              getJsonField(
+                                                                saleslogListItem,
+                                                                r'''$.items''',
+                                                              ).toString(),
+                                                              style: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .bodyMedium
+                                                                  .override(
+                                                                    font: GoogleFonts
+                                                                        .inter(
+                                                                      fontWeight: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .bodyMedium
+                                                                          .fontWeight,
+                                                                      fontStyle: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .bodyMedium
+                                                                          .fontStyle,
+                                                                    ),
+                                                                    fontSize:
+                                                                        16.0,
+                                                                    letterSpacing:
+                                                                        0.0,
                                                                     fontWeight: FlutterFlowTheme.of(
                                                                             context)
                                                                         .bodyMedium
@@ -400,19 +420,7 @@ class _LogsWidgetState extends State<LogsWidget> with TickerProviderStateMixin {
                                                                         .bodyMedium
                                                                         .fontStyle,
                                                                   ),
-                                                                  fontSize:
-                                                                      16.0,
-                                                                  letterSpacing:
-                                                                      0.0,
-                                                                  fontWeight: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMedium
-                                                                      .fontWeight,
-                                                                  fontStyle: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMedium
-                                                                      .fontStyle,
-                                                                ),
+                                                            ),
                                                           ),
                                                         ].divide(SizedBox(
                                                             width: 8.0)),
@@ -465,8 +473,7 @@ class _LogsWidgetState extends State<LogsWidget> with TickerProviderStateMixin {
                                                           ),
                                                           Text(
                                                             getJsonField(
-                                                              logsGetsaleslogsAPIResponse
-                                                                  .jsonBody,
+                                                              saleslogListItem,
                                                               r'''$.total_price''',
                                                             ).toString(),
                                                             style: FlutterFlowTheme
@@ -550,8 +557,7 @@ class _LogsWidgetState extends State<LogsWidget> with TickerProviderStateMixin {
                                                           ),
                                                           Text(
                                                             getJsonField(
-                                                              logsGetsaleslogsAPIResponse
-                                                                  .jsonBody,
+                                                              saleslogListItem,
                                                               r'''$.amount_received''',
                                                             ).toString(),
                                                             style: FlutterFlowTheme
@@ -635,8 +641,7 @@ class _LogsWidgetState extends State<LogsWidget> with TickerProviderStateMixin {
                                                           ),
                                                           Text(
                                                             getJsonField(
-                                                              logsGetsaleslogsAPIResponse
-                                                                  .jsonBody,
+                                                              saleslogListItem,
                                                               r'''$.change''',
                                                             ).toString(),
                                                             style: FlutterFlowTheme
@@ -680,7 +685,7 @@ class _LogsWidgetState extends State<LogsWidget> with TickerProviderStateMixin {
                                                                   16.0,
                                                                   0.0,
                                                                   0.0,
-                                                                  0.0),
+                                                                  8.0),
                                                       child: Row(
                                                         mainAxisSize:
                                                             MainAxisSize.max,
@@ -720,8 +725,7 @@ class _LogsWidgetState extends State<LogsWidget> with TickerProviderStateMixin {
                                                           ),
                                                           Text(
                                                             getJsonField(
-                                                              logsGetsaleslogsAPIResponse
-                                                                  .jsonBody,
+                                                              saleslogListItem,
                                                               r'''$.payment_method''',
                                                             ).toString(),
                                                             style: FlutterFlowTheme

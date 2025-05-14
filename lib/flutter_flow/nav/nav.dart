@@ -8,6 +8,7 @@ import '/backend/schema/structs/index.dart';
 
 import '/auth/base_auth_user_provider.dart';
 
+import '/main.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 
@@ -79,13 +80,13 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       refreshListenable: appStateNotifier,
       navigatorKey: appNavigatorKey,
       errorBuilder: (context, state) =>
-          appStateNotifier.loggedIn ? LoadingScreenWidget() : LoginWidget(),
+          appStateNotifier.loggedIn ? NavBarPage() : LoginWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
           builder: (context, _) =>
-              appStateNotifier.loggedIn ? LoadingScreenWidget() : LoginWidget(),
+              appStateNotifier.loggedIn ? NavBarPage() : LoginWidget(),
         ),
         FFRoute(
           name: LoadingScreenWidget.routeName,
@@ -105,22 +106,28 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: PossWidget.routeName,
           path: PossWidget.routePath,
-          builder: (context, params) => PossWidget(),
+          builder: (context, params) =>
+              params.isEmpty ? NavBarPage(initialPage: 'POSS') : PossWidget(),
         ),
         FFRoute(
           name: MorePageWidget.routeName,
           path: MorePageWidget.routePath,
-          builder: (context, params) => MorePageWidget(),
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'MorePage')
+              : MorePageWidget(),
         ),
         FFRoute(
           name: InventoryWidget.routeName,
           path: InventoryWidget.routePath,
-          builder: (context, params) => InventoryWidget(),
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'Inventory')
+              : InventoryWidget(),
         ),
         FFRoute(
           name: ShiftWidget.routeName,
           path: ShiftWidget.routePath,
-          builder: (context, params) => ShiftWidget(),
+          builder: (context, params) =>
+              params.isEmpty ? NavBarPage(initialPage: 'Shift') : ShiftWidget(),
         ),
         FFRoute(
           name: ProfileWidget.routeName,
@@ -180,7 +187,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: DashboardWidget.routeName,
           path: DashboardWidget.routePath,
-          builder: (context, params) => DashboardWidget(),
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'dashboard')
+              : DashboardWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
@@ -365,14 +374,13 @@ class FFRoute {
                 )
               : builder(context, ffParams);
           final child = appStateNotifier.loading
-              ? Center(
-                  child: SizedBox(
-                    width: 50.0,
-                    height: 50.0,
-                    child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        FlutterFlowTheme.of(context).primary,
-                      ),
+              ? Container(
+                  color: FlutterFlowTheme.of(context).secondary,
+                  child: Center(
+                    child: Image.asset(
+                      'assets/images/Logo.png',
+                      width: 256.0,
+                      fit: BoxFit.cover,
                     ),
                   ),
                 )
