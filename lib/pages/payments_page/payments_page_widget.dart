@@ -37,7 +37,7 @@ class _PaymentsPageWidgetState extends State<PaymentsPageWidget> {
     super.initState();
     _model = createModel(context, () => PaymentsPageModel());
 
-    _model.amountReceivedTextController ??= TextEditingController();
+    _model.amountReceivedTextController ??= TextEditingController(text: '0');
     _model.amountReceivedFocusNode ??= FocusNode();
 
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
@@ -97,7 +97,7 @@ class _PaymentsPageWidgetState extends State<PaymentsPageWidget> {
                   size: 25.0,
                 ),
                 onPressed: () async {
-                  context.pushNamed(LoadingScreenWidget.routeName);
+                  context.pushNamed(PossWidget.routeName);
                 },
               ),
               title: Text(
@@ -185,7 +185,7 @@ class _PaymentsPageWidgetState extends State<PaymentsPageWidget> {
                               ),
                               child: Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 4.0),
+                                    0.0, 0.0, 0.0, 8.0),
                                 child: Builder(
                                   builder: (context) {
                                     final productList = getJsonField(
@@ -369,7 +369,7 @@ class _PaymentsPageWidgetState extends State<PaymentsPageWidget> {
                               ),
                               child: Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 4.0),
+                                    0.0, 0.0, 0.0, 8.0),
                                 child: Builder(
                                   builder: (context) {
                                     final productList = getJsonField(
@@ -563,10 +563,13 @@ class _PaymentsPageWidgetState extends State<PaymentsPageWidget> {
                                     ),
                               ),
                               Text(
-                                getJsonField(
-                                  paymentsPageGetposAPIResponse.jsonBody,
-                                  r'''$.total_price''',
-                                ).toString(),
+                                valueOrDefault<String>(
+                                  '₱${getJsonField(
+                                    paymentsPageGetposAPIResponse.jsonBody,
+                                    r'''$.total_price''',
+                                  ).toString()}',
+                                  '0',
+                                ),
                                 style: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .override(
@@ -768,35 +771,21 @@ class _PaymentsPageWidgetState extends State<PaymentsPageWidget> {
                             ].divide(SizedBox(height: 5.0)),
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 16.0, 0.0, 0.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Change:',
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                          font: GoogleFonts.inter(
-                                            fontWeight:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontWeight,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontStyle,
-                                          ),
-                                          fontSize: 16.0,
-                                          letterSpacing: 0.0,
+                        Column(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Change:',
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .override(
+                                        font: GoogleFonts.inter(
                                           fontWeight:
                                               FlutterFlowTheme.of(context)
                                                   .bodyMedium
@@ -806,44 +795,33 @@ class _PaymentsPageWidgetState extends State<PaymentsPageWidget> {
                                                   .bodyMedium
                                                   .fontStyle,
                                         ),
+                                        fontSize: 16.0,
+                                        letterSpacing: 0.0,
+                                        fontWeight: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontWeight,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontStyle,
+                                      ),
+                                ),
+                                Text(
+                                  valueOrDefault<String>(
+                                    '₱${((int? total, int? payment) {
+                                      return total != null && payment != null
+                                          ? payment - total
+                                          : null;
+                                    }(getJsonField(
+                                          paymentsPageGetposAPIResponse
+                                              .jsonBody,
+                                          r'''$.total_price''',
+                                        ), int.tryParse(_model.amountReceivedTextController.text))).toString()}',
+                                    '0',
                                   ),
-                                  Text(
-                                    valueOrDefault<String>(
-                                      '₱${valueOrDefault<String>(
-                                        ((int? total, int? payment) {
-                                          return total != null &&
-                                                  payment != null
-                                              ? payment - total
-                                              : null;
-                                        }(
-                                                getJsonField(
-                                                  paymentsPageGetposAPIResponse
-                                                      .jsonBody,
-                                                  r'''$.total_price''',
-                                                ),
-                                                int.tryParse(_model
-                                                    .amountReceivedTextController
-                                                    .text)))
-                                            .toString(),
-                                        '0',
-                                      )}',
-                                      '0',
-                                    ),
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                          font: GoogleFonts.inter(
-                                            fontWeight:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontWeight,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontStyle,
-                                          ),
-                                          fontSize: 16.0,
-                                          letterSpacing: 0.0,
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .override(
+                                        font: GoogleFonts.inter(
                                           fontWeight:
                                               FlutterFlowTheme.of(context)
                                                   .bodyMedium
@@ -853,15 +831,22 @@ class _PaymentsPageWidgetState extends State<PaymentsPageWidget> {
                                                   .bodyMedium
                                                   .fontStyle,
                                         ),
-                                  ),
-                                ].divide(SizedBox(width: 5.0)),
-                              ),
-                            ].divide(SizedBox(height: 5.0)),
-                          ),
+                                        letterSpacing: 0.0,
+                                        fontWeight: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontWeight,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontStyle,
+                                      ),
+                                ),
+                              ].divide(SizedBox(width: 5.0)),
+                            ),
+                          ].divide(SizedBox(height: 5.0)),
                         ),
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 24.0, 0.0, 0.0),
+                              0.0, 16.0, 0.0, 0.0),
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -987,6 +972,25 @@ class _PaymentsPageWidgetState extends State<PaymentsPageWidget> {
                                             return AlertDialog(
                                               content:
                                                   Text('Payment Successful'),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () =>
+                                                      Navigator.pop(
+                                                          alertDialogContext),
+                                                  child: Text('Ok'),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      } else {
+                                        await showDialog(
+                                          context: context,
+                                          builder: (alertDialogContext) {
+                                            return AlertDialog(
+                                              title: Text('Unsuccessful'),
+                                              content: Text(
+                                                  'Payment Unsuccessful! Try again.'),
                                               actions: [
                                                 TextButton(
                                                   onPressed: () =>

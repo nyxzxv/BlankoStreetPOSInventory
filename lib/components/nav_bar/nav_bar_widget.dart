@@ -208,8 +208,8 @@ class _NavBarWidgetState extends State<NavBarWidget>
                                   : FlutterFlowTheme.of(context).primary,
                               size: 24.0,
                             ),
-                            onPressed: () async {
-                              context.pushNamed(ShiftWidget.routeName);
+                            onPressed: () {
+                              print('shiftBtn pressed ...');
                             },
                           ),
                           if (widget.pageNum == 2)
